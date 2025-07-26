@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票走势查看器</title>
+    <link rel="stylesheet" href="popup.css">
+    <script src="./chart.min.js"></script>
+    <script>
+        // 如果本地Chart.js加载失败，尝试使用CDN
+        if (typeof Chart === 'undefined') {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js';
+            script.onload = () => console.log('Chart.js CDN加载成功');
+            script.onerror = () => console.error('Chart.js CDN加载失败');
+            document.head.appendChild(script);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📈 股票走势</h1>
+        </header>
+        
+        <div class="search-section">
+            <div class="search-box">
+                <input type="text" id="stockSearch" placeholder="输入股票代码或名称 (如: AAPL, 苹果, 腾讯)" />
+            </div>
+            
+            <div class="search-history" id="searchHistory" style="display: none;">
+                <div class="history-row">
+                    <span class="history-title">最近</span>
+                    <div class="history-items" id="historyItems">
+                        <!-- 选择记录将在这里动态生成 -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="search-results" id="searchResults" style="display: none;">
+                <div class="result-item">
+                    <div class="stock-info">
+                        <span id="stockName" class="stock-name">股票名称</span>
+                        <span id="stockCode" class="stock-code">股票代码</span>
+                    </div>
+                    <button id="selectBtn" class="select-btn">选择</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-section" id="chartSection" style="display: none;">
+            <div class="chart-header">
+                <h2 id="selectedStockName">股票名称</h2>
+                <span id="selectedStockCode" class="stock-code"></span>
+            </div>
+            
+            <div class="price-info" id="priceInfo">
+                <div class="current-price">
+                    <div class="price-main">
+                        <span class="price-value" id="currentPrice">$0.00</span>
+                        <span class="price-change" id="priceChange">+0.00 (+0.00%)</span>
+                        <button class="expand-btn" id="expandBtn" title="展开更多信息">
+                            <span class="expand-icon">▼</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="price-details" id="priceDetails" style="display: none;">
+                    <div class="price-item">
+                        <span class="label">开盘</span>
+                        <span class="value" id="openPrice">$0.00</span>
+                    </div>
+                    <div class="price-item">
+                        <span class="label">昨收</span>
+                        <span class="value" id="yesterdayClose">$0.00</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="stockChart"></canvas>
+            </div>
+        </div>
+
+        <div class="loading" id="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>加载中...</p>
+        </div>
+
+        <div class="error" id="error" style="display: none;">
+            <p>无法获取股票数据，请检查股票代码是否正确</p>
+        </div>
+    </div>
+    
+    <script src="popup.js"></script>
+</body>
+</html> 
